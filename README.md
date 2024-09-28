@@ -62,8 +62,8 @@ If you want to test your project locally, you can use the following commands:
 Cloning repo:
 
 ```bash
-git clone https://github.com/Rutarenzi/SummaryAi.git
-cd SummaryAi
+git clone https://github.com/Rherve250/GraphraseAi.git
+cd GraphraseAi
 ```
 
 
