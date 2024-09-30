@@ -172,3 +172,31 @@ import {
     return date.toISOString().split('T')[0]; 
   };
   
+  function getJobStatistics(jobPosts:any) {
+    // Initialize counters
+    let totalJobs = jobPosts.length;
+    let openJobs = 0;
+    let closedJobs = 0;
+    let industrySet = new Set();
+  
+    // Loop through each job post and gather statistics
+    jobPosts.forEach((job:any) => {
+      // Count open and closed jobs based on status
+      if (job.status === 'open') {
+        openJobs++;
+      } else if (job.status === 'closed') {
+        closedJobs++;
+      }
+  
+      // Add industry to the set (set automatically handles uniqueness)
+      industrySet.add(job.industry);
+    });
+  
+    // Return the statistics as an object
+    return {
+      totalJobs: totalJobs,
+      openJobs: openJobs,
+      closedJobs: closedJobs,
+      totalIndustries: industrySet.size
+    };
+  }
