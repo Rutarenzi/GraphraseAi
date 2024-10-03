@@ -16,9 +16,14 @@ const MyContent=async()=>{
 
 
 const getOneContent=async(id)=>{
-  console.log(id)
+  
   return await window.canister.GraphraseAi.getOneContent(id)
 }
+
+const ContentStats=async()=>{
+  return await window.canister.GraphraseAi.ContentStats()
+}
+
 
 
 
@@ -27,7 +32,8 @@ export {
   updateContent,
   deleteContent,
   MyContent,
-  getOneContent
+  getOneContent,
+  ContentStats
 }
 
 

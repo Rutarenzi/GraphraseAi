@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { buttonVariants,Button} from "@/components/ui/button"
 import { useNavigate } from "react-router-dom";
-import  { login, logout  } from "../utils/auth" 
+import  { login  } from "../utils/auth" 
 
 const Homepage=()=> {
   const navigate= useNavigate();

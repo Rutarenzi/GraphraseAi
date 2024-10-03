@@ -41,9 +41,6 @@ const Table = () => {
     setOpen(false);
     setSelectedRow(null);
   };
-  const handleGetRowId = (e) => {
-    return e.uniId
-}
   const columns = [
     {field: "id", hearderName:"ID", width: 300},
     { field: "category", headerName: "Category", width: 150 },

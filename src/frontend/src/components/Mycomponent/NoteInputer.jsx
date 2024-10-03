@@ -26,12 +26,12 @@ const NoteInputer=()=>{
    const { graparaphrase } = callApiAi()
 
    const callAi=async()=>{
-   
      if(myText){
       setLoads(true)
        const aiNote = await graparaphrase(category,myText);
        if(!aiNote){
         toast({
+              variant: "destructive",
               title: "Error!!!",
               description: "Something went wrong",
             })
@@ -41,7 +41,7 @@ const NoteInputer=()=>{
        setAiText(aiNote)
        if(!window.auth.isAuthenticated){
         toast({
-              title: "information",
+              title: "Information!!!",
               description: "login to save your data",
             })
         setLoads(false)
@@ -90,7 +90,8 @@ const NoteInputer=()=>{
                    {window.auth.isAuthenticated &&  
                       <Button 
                          onClick={goToDash}
-                         className={cn(buttonVariants({ variant: "outline", size: "lg" }))}>
+                         className={cn(buttonVariants({ variant: "outline", size: "lg", }),
+                         )}>
                                <span className="text-black">Dashboard</span>
                      </Button>}
                </div>
@@ -98,14 +99,17 @@ const NoteInputer=()=>{
             <div className="h-[70vh] flex items-center justify-center mt-12">
                <form onSubmit={handleSubmit(submit)} className="h-full w-full flex flex-col space-y-4 sm:flex-row lg:space-y-0 lg:space-x-4">
                   <div className="relative flex flex-col w-full sm:w-1/2 h-full">
-                    <Textarea
-                      placeholder="Tell us a little bit about yourself"
-                      className="resize-none mb-2 h-full"
+                  <Textarea
+                      placeholder="Please write  your note here!"
+                      className={`resize-none mb-2 h-full ${errors.userNote ? 'border-red-500' : ''}`}
                       value={myText}
                       name="myText"
-                      {...register('userNote')}
-                      onChange={(e) => { setMyText(e.target.value) }}
-                      />
+                      {...register('userNote')}  // Validation rule
+                       onChange={(e) => setMyText(e.target.value)}
+                         />
+                      {errors.userNote && (
+                        <p className="text-red-500 text-sm">Error: {errors.userNote.message}</p>
+                        )}
                       <MySpan 
                       name={category}
                       onclick={callAi}
@@ -113,14 +117,18 @@ const NoteInputer=()=>{
                       </div>
                       {loads?<TextAreaSkeleton/> :<div className="relative flex flex-col w-full sm:w-1/2 h-full">
                    <Textarea
-                   placeholder="Tell us a little bit about yourself"
+                   placeholder="Here is for AI generate note"
                    value={aiText}
                    name="aiText"
                    {...register('AiNote')}
+                   onChange={(e) => setAiText(e.target.value)}
                    className="resize-none mb-2 h-full "/>
+                     {errors.AiNote && (
+                        <p className="text-red-500 text-sm">Error: {errors.AiNote.message}</p>
+                        )}
                    <Button
                    type="submit"
-                   className="absolute bottom-6  right-4 " disabled={load}>{load?<CircularProgress size={25} color="white" />:"Save"}</Button>
+                   className="absolute bottom-6  right-4  z-50 cursor-pointer" disabled={!window.auth.isAuthenticated}>{load?<CircularProgress size={25} color="white" />:"Save"}</Button>
                    </div>}
                    
                    </form>

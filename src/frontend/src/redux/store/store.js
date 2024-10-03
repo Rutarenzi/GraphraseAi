@@ -4,6 +4,7 @@ import UpdateContentSlice from "../slice/editContentSlice";
 import DeleteContentSlice from "../slice/deleteContentSlice";
 import MyContentSlice from "../slice/myContentSlice";
 import OneContentSlice from "../slice/getOneContentSlice";
+import MyContentStatsSlice from "../slice/MyContentStatSlice"
 
 
 const store = configureStore({
@@ -13,6 +14,7 @@ const store = configureStore({
         deleteContent: DeleteContentSlice,
         mycontent: MyContentSlice,
         OneContent: OneContentSlice,
+        myContentStats: MyContentStatsSlice
     }
 });
 
