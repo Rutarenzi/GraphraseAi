@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React from "react";
 import { Box,CircularProgress  } from "@mui/material";
 import { useNavigate} from "react-router-dom";
 import { Button } from "../ui/button";
@@ -22,14 +22,13 @@ const Action=({data})=>{
     }
 
    const { loader } = useSelector((state)=>state.deleteContent)
-   const load=loader
     return(
         <Box sx={{display:"flex", justifyContent:"space-between"}}>
         <Button  onClick={goToEdit}>
        <EditAttributesSharp/>
      </Button>
      <Button  onClick={ContentDeletor} disabled={loader}>
-       {load?<CircularProgress size={25} color="white" />:<AutoDelete/>}
+       {loader?<CircularProgress size={25} color="white" />:<AutoDelete/>}
      </Button>
       </Box>
     )

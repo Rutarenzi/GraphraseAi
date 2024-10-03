@@ -29,7 +29,6 @@ const CreateContentSlice= createSlice({
         }
       },
       [CreateContentThunk.fulfilled]: (state,{payload}) => {
-        console.log(payload)
         return {
             ...state,
             load: false,

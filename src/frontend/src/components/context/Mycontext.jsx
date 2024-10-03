@@ -11,7 +11,7 @@ export const AuthContextProvider = ({ children }) => {
 
     useEffect(() => {
         const checkAuth = async () => {
-            const authenticated = true;
+            const authenticated = window.auth.isAuthenticated;
             setIsAuth(authenticated);
             if (!authenticated) {
                 navigate('/');

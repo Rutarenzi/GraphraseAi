@@ -16,7 +16,7 @@ const MyCard=({name,counts})=>{
           <CardDescription>Number of {name}</CardDescription>
         </CardHeader>
         <CardContent>
-         <span className="text-4xl font-bold">{counts}</span>
+         <span className="text-4xl font-bold">{counts.toString()}</span>
         </CardContent>
       </Card>
     )

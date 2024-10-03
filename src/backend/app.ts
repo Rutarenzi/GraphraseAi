@@ -62,6 +62,13 @@ import {
   
   type Message = typeof Message.tsType
 
+  const ContentStat=Record({
+    totalNotes: nat,
+    totalParapharase: nat,
+    totalGrammerCheck :nat,
+    totalTextSimply: nat
+  })
+
   const ContentStorage = StableBTreeMap<text, Content>(0);
 
   export default Canister({
@@ -92,7 +99,7 @@ import {
   
          const contentOpt = ContentStorage.get(id)
          if(!contentOpt){
-             return Err({NotFound: `Job doesn't exist`})
+             return Err({NotFound: `Content doesn't exist`})
          }
          if(JSON.stringify(contentOpt.userId) !== JSON.stringify(ic.caller())){
           return Err({NotAllowed: "You are not authorized"})
@@ -113,7 +120,6 @@ import {
     getOneContent: query([text],Result(Content,Message),(id)=>{
       try{
         const contentOpt = ContentStorage.get(id);
-        console.log(contentOpt)
         if(!contentOpt){
             return Err({NotFound: `Job does not exist`})
         }
@@ -123,7 +129,7 @@ import {
        
         return Ok(contentOpt)
       }catch(error:any){
-        return Err({Error: `Error Occured ${error}`})
+        return Err({Error: `Error Occured ${error.message}`})
       }
     }),
     deleteContent: update([text],Result(text,Message),(id)=>{
@@ -144,21 +150,40 @@ import {
         return Ok("Deleted successfully")
     
       }catch(error:any){
-        return Err({Error: `Error Occured ${error}`})
+        return Err({Error: `Error Occured ${error.message}`})
       }
       }),
       MyContent: query([],Result(Vec(Content),Message),()=>{
         try{
           const contents = ContentStorage.values();
           if(contents.length === 0){
-            return Err({Error: "Empty Job Post"})
+            return Err({Error: "Empty Content "})
           }
-          console.log(ic.caller())
            const myContents = contents.filter((item:Content)=>( JSON.stringify(item.userId) == JSON.stringify(ic.caller())));
            if(myContents.length === 0){
-            return Err({Error: "You have not posted a job"})
+            return Err({Error: "You have not Content"})
           }
            return Ok(myContents);
+        }catch(error:any){
+          return Err({Error: `Error Occured ${error.message}`})
+        }
+      }),
+
+      ContentStats:query([],Result(ContentStat,Message),()=>{
+        try{
+
+          const content = ContentStorage.values();
+
+          if(content.length === 0){
+            return Err({Error: "Empty Content"})
+          }
+          const myContents = content.filter((item:Content)=>( JSON.stringify(item.userId) == JSON.stringify(ic.caller())));
+          if(myContents.length === 0){
+           return Err({Error: "You have no content"})
+         }
+         const ContentStatistics = getContentStatistics(myContents);
+         return Ok(ContentStatistics)
+    
         }catch(error:any){
           return Err({Error: `Error Occured ${error.message}`})
         }
@@ -172,31 +197,29 @@ import {
     return date.toISOString().split('T')[0]; 
   };
   
-  function getJobStatistics(jobPosts:any) {
+  function getContentStatistics(MyContents:any) {
     // Initialize counters
-    let totalJobs = jobPosts.length;
-    let openJobs = 0;
-    let closedJobs = 0;
-    let industrySet = new Set();
+    let totalNotes = MyContents.length;
+    let totalParapharase = 0;
+    let totalGrammerCheck = 0;
+    let totalTextSimply = 0;
   
-    // Loop through each job post and gather statistics
-    jobPosts.forEach((job:any) => {
-      // Count open and closed jobs based on status
-      if (job.status === 'open') {
-        openJobs++;
-      } else if (job.status === 'closed') {
-        closedJobs++;
+    MyContents.forEach((content:any) => {
+     
+      if (content.category == 'paraphrase') {
+        totalParapharase++;
+      } else if (content.category == 'grammar-check') {
+        totalGrammerCheck++;
+      } else if(content.category == "simplify"){
+        totalTextSimply++
       }
-  
-      // Add industry to the set (set automatically handles uniqueness)
-      industrySet.add(job.industry);
     });
   
     // Return the statistics as an object
     return {
-      totalJobs: totalJobs,
-      openJobs: openJobs,
-      closedJobs: closedJobs,
-      totalIndustries: industrySet.size
+      totalNotes,
+      totalParapharase,
+      totalGrammerCheck,
+      totalTextSimply
     };
   }

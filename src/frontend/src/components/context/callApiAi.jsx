@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { ToastError } from "@/utils/toast";
 
 const callApiAi = () => {
     const CHATGPT_API_KEY = "your_openai_api_key_here";
@@ -27,8 +28,6 @@ const callApiAi = () => {
                 systemMessage = "You are a helpful assistant that checks grammar.";
                 userMessage = `Check the grammar and suggest corrections for the following text:\n\n${note}`;
                 break;
-            default:
-                return null;
         }
 
         const data = {
@@ -51,8 +50,8 @@ const callApiAi = () => {
             });
 
          if(!response.ok) {
-              console.error("API request failed:", response.statusText);
-              toast.error("API request failed:", response.statusText)
+            console.error("API request failed:", response.statusText);
+            ToastError(`API request failed:${response.statusText}`)
              return null;
         }
 
