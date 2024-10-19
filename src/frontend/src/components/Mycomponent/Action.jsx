@@ -6,6 +6,7 @@ import { AutoDelete, EditAttributesSharp } from "@mui/icons-material";
 import { useDispatch,useSelector } from "react-redux";
 import { DeleteContentThunk }from "../../redux/action/deleteContent"
 import { MyContentThunk } from "@/redux/action/MyContent";
+import { MyContentStatsThunk } from "@/redux/action/MyContentStats";
 
 
 const Action=({data})=>{
@@ -17,8 +18,9 @@ const Action=({data})=>{
     }
     
     const ContentDeletor=async()=>{
-    await dispatch(DeleteContentThunk(data.id))
-    dispatch(MyContentThunk());
+    await dispatch(DeleteContentThunk(data.id));
+    await dispatch(MyContentThunk());
+    dispatch(MyContentStatsThunk());
     }
 
    const { loader } = useSelector((state)=>state.deleteContent)
