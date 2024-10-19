@@ -53,27 +53,21 @@ const UpdatedInputer=()=>{
       setLoads(true)
        const aiNote = await graparaphrase(category,myText);
        if(!aiNote){
-        toast({
-          variant: "destructive",
-          title: "Error!!!",
-          description: "Something went wrong",
-            })
+            ToastError("Something went wrong")
         setLoads(false)
        }
        setLoads(false)
        setAiText(aiNote)
+       setValue('AiNote',aiNote)
        if(!window.auth.isAuthenticated){
-        toast({
-              title: "information",
-              description: "login to save your data",
-            })
+            ToastError("login to save your data")
         setLoads(false)
        }
        
        
      }
    }
-   const { register, handleSubmit, formState: { errors } } = useForm({
+   const { register, handleSubmit, setValue,formState: { errors } } = useForm({
     resolver: yupResolver(ContentValid),
   });
    const submit=(data)=>{
@@ -86,6 +80,7 @@ const UpdatedInputer=()=>{
    const { loadss } = useSelector((state)=>state.updateContent)
    const goToDash=()=>{
     navigate('/Dashboard');
+    window.location.reload()
     return;
   }
     return(
@@ -150,7 +145,9 @@ const UpdatedInputer=()=>{
         value={aiText}
         name="aiText"
         {...register('AiNote')}
-        onChange={(e) => setAiText(e.target.value)}
+        onChange={(e) => {setAiText(e.target.value);
+          setValue('AiNote',e.target.value)
+        }}
         className="resize-none mb-2 h-full "/>
         {errors.AiNote && (
             <p className="text-red-500 text-sm">Error: {errors.AiNote.message}</p>
