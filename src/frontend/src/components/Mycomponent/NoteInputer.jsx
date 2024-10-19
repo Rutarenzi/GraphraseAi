@@ -13,6 +13,7 @@ import MySpan from "./MySpan";
 import { ContentValid } from "@/validation/contentValid";
 import { CreateContentThunk } from "@/redux/action/createContent";
 import { CircularProgress } from "@mui/material";
+import { ToastError } from "@/utils/toast";
  
 
 const NoteInputer=()=>{
@@ -30,27 +31,21 @@ const NoteInputer=()=>{
       setLoads(true)
        const aiNote = await graparaphrase(category,myText);
        if(!aiNote){
-        toast({
-              variant: "destructive",
-              title: "Error!!!",
-              description: "Something went wrong",
-            })
+            ToastError("Something went wrong")
         setLoads(false)
        }
        setLoads(false)
        setAiText(aiNote)
+       setValue('AiNote', aiNote)
        if(!window.auth.isAuthenticated){
-        toast({
-              title: "Information!!!",
-              description: "login to save your data",
-            })
+            ToastError("login to save your data")
         setLoads(false)
        }
       
        
      }
    }
-   const { register, handleSubmit, formState: { errors } } = useForm({
+   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
     resolver: yupResolver(ContentValid),
   });
    const dispatch = useDispatch();
@@ -64,6 +59,7 @@ const NoteInputer=()=>{
    const { load } = useSelector((state)=>state.createContent)
    const goToDash=()=>{
     navigate('/Dashboard');
+    window.location.load();
     return;
   }
     return(
@@ -121,7 +117,9 @@ const NoteInputer=()=>{
                    value={aiText}
                    name="aiText"
                    {...register('AiNote')}
-                   onChange={(e) => setAiText(e.target.value)}
+                   onChange={(e) => {setAiText(e.target.value);
+                    setValue('AiNote',e.target.value)
+                   }}
                    className="resize-none mb-2 h-full "/>
                      {errors.AiNote && (
                         <p className="text-red-500 text-sm">Error: {errors.AiNote.message}</p>
