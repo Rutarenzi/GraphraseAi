@@ -51,7 +51,7 @@ Please ensure all these prerequisites are met before proceeding with the setup o
 
 For seamless run,get your_openai_api_key before you proceed
 ```
- go to src/frontend/src/callApiAi.js assign your key to a variable call CHATGPT_API_KEY
+ go to src/frontend/src/components/context/callApiAi.jsx assign your key to a variable call CHATGPT_API_KEY
 ```
 
 
