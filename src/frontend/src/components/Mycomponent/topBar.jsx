@@ -13,8 +13,8 @@ const TopBar=()=>{
    }
    
     return(
-      <div class="border-b border-gray-200 p-2">
-      <div class="container mx-auto flex justify-between items-center">
+      <div className="border-b border-gray-200 p-2">
+      <div className="container mx-auto flex justify-between items-center">
      
         <div className="text-black text-xl font-bold" onClick={goToLanding}>
           GraphraseAi
